@@ -1,188 +1,412 @@
 <!DOCTYPE html>
 <html lang="en">
 
+<!-- ============================================================
+     Expense Tracker — Frontend Layout
+     File    : frontend/index.html
+     Author  : Sujan
+     Purpose : Single-page HTML skeleton for the Expense Tracker
+               lab project. Uses Bootstrap 5 for responsive grid
+               and jQuery (linked at bottom) for interactivity.
+
+     Page Structure:
+       1. <head>   — Meta, CDN links, local CSS
+       2. <nav>    — Top navigation bar
+       3. <main>
+            §1    — Dashboard summary cards
+            §2    — Add Transaction form
+            §3    — Transactions table
+       4. <footer> — Credits
+       5. <scripts>— jQuery, Bootstrap JS, custom script
+============================================================ -->
+
 <head>
-    <!-- ============================================================
-       META & TITLE
-  ============================================================ -->
+    <!-- ── Character encoding & viewport ──────────────────────── -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Expense Tracker — Lab Project" />
-    <title>Expense Tracker | Lab Project</title>
 
-    <!-- Bootstrap 5 CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
-    <!-- Bootstrap Icons -->
+    <!-- ── SEO meta tags ──────────────────────────────────────── -->
+    <meta name="description" content="Expense Tracker — A lab-friendly single-page app to track income and expenses." />
+    <meta name="author" content="Sujan" />
+    <meta name="keywords" content="expense tracker, income, budget, jQuery, Bootstrap, lab project" />
+
+    <!-- ── Page title ─────────────────────────────────────────── -->
+    <title>Expense Tracker | Sujan</title>
+
+    <!-- ================================================================
+       EXTERNAL CSS DEPENDENCIES
+       Load order: Bootstrap → Bootstrap Icons → Google Font → Custom
+  ================================================================ -->
+
+    <!-- 1. Bootstrap 5.3 — responsive grid, components, utilities -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+
+    <!-- 2. Bootstrap Icons 1.11 — icon set used throughout the UI -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
-    <!-- Google Fonts: Inter -->
+
+    <!-- 3. Google Fonts — Inter for a clean, modern typeface -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
         rel="stylesheet" />
-    <!-- Custom CSS -->
+
+    <!-- 4. Custom stylesheet — overrides & component styles -->
     <link rel="stylesheet" href="css/style.css" />
 </head>
 
 <body>
 
-    <!-- ── NAVBAR ─────────────────────────────── -->
-    <nav class="navbar navbar-dark px-4 py-3 shadow-sm" id="mainNavbar">
+    <!-- ================================================================
+       NAVBAR  (fixed top — always visible while scrolling)
+       Contains: brand icon, app name, author badge
+  ================================================================ -->
+    <nav class="navbar navbar-dark px-4 py-3 shadow-sm" id="mainNavbar" aria-label="Main navigation">
         <div class="container-fluid d-flex align-items-center gap-2">
-            <span class="navbar-icon"><i class="bi bi-wallet2"></i></span>
+
+            <!-- Brand icon -->
+            <span class="navbar-icon" aria-hidden="true">
+                <i class="bi bi-wallet2"></i>
+            </span>
+
+            <!-- App name (acts as a visual heading for the site) -->
             <span class="navbar-brand mb-0 fw-bold fs-4">ExpenseTracker</span>
-            <span class="badge ms-auto lab-badge">Lab Project</span>
+
+            <!-- Author badge — right-aligned via ms-auto -->
+            <span class="badge ms-auto lab-badge" aria-label="Author: Sujan">Sujan</span>
+
         </div>
     </nav>
+    <!-- /NAVBAR -->
 
-    <!-- ── MAIN CONTENT ──────────────────────── -->
-    <main class="container py-5">
 
-        <!-- SECTION 1: Summary Cards -->
-        <section id="summarySection" class="mb-5">
-            <h2 class="section-title mb-4">
-                <i class="bi bi-bar-chart-line-fill me-2"></i>Overview
+    <!-- ================================================================
+       MAIN CONTENT  — single scrollable page
+  ================================================================ -->
+    <main class="container py-5" id="mainContent">
+
+
+        <!-- ============================================================
+         §1  DASHBOARD — SUMMARY CARDS
+         Three equal-width cards displaying:
+           • Total Income  (green accent)
+           • Total Expense (red accent)
+           • Net Balance   (blue accent)
+         Values are set to $0.00 on load and updated by script.js.
+    ============================================================ -->
+        <section id="summarySection" class="mb-5" aria-labelledby="summaryHeading">
+
+            <!-- Section heading -->
+            <h2 class="section-title mb-4" id="summaryHeading">
+                <i class="bi bi-bar-chart-line-fill me-2" aria-hidden="true"></i>Dashboard Overview
             </h2>
+
+            <!-- Bootstrap row — collapses to stacked on small screens -->
             <div class="row g-4">
 
-                <!-- Total Income Card -->
-                <div class="col-12 col-md-4">
-                    <div class="summary-card income-card h-100 p-4 rounded-4 shadow-sm">
+                <!-- ── Card 1: Total Income ────────────────────────── -->
+                <div class="col-12 col-sm-6 col-md-4">
+                    <article class="summary-card income-card h-100 p-4 rounded-4 shadow-sm" aria-label="Total income">
+
+                        <!-- Card header: label + icon -->
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <span class="card-label">Total Income</span>
-                            <span class="card-icon income-icon"><i class="bi bi-arrow-down-circle-fill"></i></span>
+                            <span class="card-icon income-icon" aria-hidden="true">
+                                <i class="bi bi-arrow-down-circle-fill"></i>
+                            </span>
                         </div>
-                        <h3 class="card-amount" id="totalIncome">$0.00</h3>
-                        <p class="card-sub mt-1 mb-0">All credited amounts</p>
-                    </div>
-                </div>
 
-                <!-- Total Expense Card -->
-                <div class="col-12 col-md-4">
-                    <div class="summary-card expense-card h-100 p-4 rounded-4 shadow-sm">
+                        <!-- Dynamic amount — updated by jQuery -->
+                        <h3 class="card-amount" id="totalIncome">$0.00</h3>
+
+                        <!-- Descriptive sub-text -->
+                        <p class="card-sub mt-1 mb-0">All credited amounts</p>
+
+                    </article>
+                </div>
+                <!-- /Card 1 -->
+
+                <!-- ── Card 2: Total Expense ───────────────────────── -->
+                <div class="col-12 col-sm-6 col-md-4">
+                    <article class="summary-card expense-card h-100 p-4 rounded-4 shadow-sm" aria-label="Total expense">
+
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <span class="card-label">Total Expense</span>
-                            <span class="card-icon expense-icon"><i class="bi bi-arrow-up-circle-fill"></i></span>
+                            <span class="card-icon expense-icon" aria-hidden="true">
+                                <i class="bi bi-arrow-up-circle-fill"></i>
+                            </span>
                         </div>
+
                         <h3 class="card-amount" id="totalExpense">$0.00</h3>
                         <p class="card-sub mt-1 mb-0">All debited amounts</p>
-                    </div>
-                </div>
 
-                <!-- Balance Card -->
-                <div class="col-12 col-md-4">
-                    <div class="summary-card balance-card h-100 p-4 rounded-4 shadow-sm">
+                    </article>
+                </div>
+                <!-- /Card 2 -->
+
+                <!-- ── Card 3: Net Balance ─────────────────────────── -->
+                <div class="col-12 col-sm-6 col-md-4">
+                    <article class="summary-card balance-card h-100 p-4 rounded-4 shadow-sm" aria-label="Net balance">
+
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <span class="card-label">Balance</span>
-                            <span class="card-icon balance-icon"><i class="bi bi-wallet-fill"></i></span>
+                            <span class="card-icon balance-icon" aria-hidden="true">
+                                <i class="bi bi-wallet-fill"></i>
+                            </span>
                         </div>
+
                         <h3 class="card-amount" id="balance">$0.00</h3>
-                        <p class="card-sub mt-1 mb-0">Income − Expense</p>
-                    </div>
+                        <p class="card-sub mt-1 mb-0">Income &minus; Expense</p>
+
+                    </article>
                 </div>
+                <!-- /Card 3 -->
 
             </div>
+            <!-- /row -->
+
         </section>
+        <!-- /§1 Dashboard -->
 
-        <!-- SECTION 2: Add Transaction Form -->
-        <section id="formSection" class="mb-5">
-            <h2 class="section-title mb-4">
-                <i class="bi bi-plus-circle-fill me-2"></i>Add Transaction
+
+        <!-- ============================================================
+         §2  ADD TRANSACTION FORM
+         Input fields:
+           • Description (text, required)
+           • Amount      (number, min 0.01, required)
+           • Type        (select: Income | Expense)
+           • Date        (date picker, defaults to today)
+         Buttons:
+           • Add Transaction — submits the form (handled by jQuery)
+           • Clear          — resets all fields
+    ============================================================ -->
+        <section id="formSection" class="mb-5" aria-labelledby="formHeading">
+
+            <h2 class="section-title mb-4" id="formHeading">
+                <i class="bi bi-plus-circle-fill me-2" aria-hidden="true"></i>Add Transaction
             </h2>
+
+            <!-- Form card wrapper -->
             <div class="form-wrapper rounded-4 shadow-sm p-4">
-                <form id="transactionForm" novalidate>
-                    <div class="row g-3">
 
-                        <!-- Description -->
-                        <div class="col-12 col-md-5">
-                            <label for="txDescription" class="form-label">Description <span
-                                    class="text-danger">*</span></label>
-                            <input type="text" class="form-control custom-input" id="txDescription"
-                                placeholder="e.g. Monthly salary, Grocery bill…" required />
-                            <div class="invalid-feedback">Please enter a description.</div>
+                <!--
+          novalidate: we use custom jQuery validation, not the browser default.
+          The form never reloads the page — submit is intercepted by event.preventDefault().
+        -->
+                <form id="transactionForm" novalidate autocomplete="off">
+
+                    <!-- ── Row of form fields ─────────────────────────── -->
+                    <div class="row g-3 align-items-end">
+
+                        <!-- Field 1: Description -->
+                        <div class="col-12 col-lg-5">
+                            <label for="txDescription" class="form-label">
+                                Description
+                                <span class="text-danger" aria-hidden="true">*</span>
+                                <span class="visually-hidden">(required)</span>
+                            </label>
+                            <input type="text" class="form-control custom-input" id="txDescription" name="txDescription"
+                                placeholder="e.g. Monthly salary, Grocery bill…" maxlength="100" required
+                                aria-describedby="txDescriptionFeedback" />
+                            <!-- Validation error shown when field is empty -->
+                            <div class="invalid-feedback" id="txDescriptionFeedback">
+                                <i class="bi bi-exclamation-circle me-1"></i>Please enter a description.
+                            </div>
                         </div>
 
-                        <!-- Amount -->
-                        <div class="col-12 col-md-3">
-                            <label for="txAmount" class="form-label">Amount ($) <span
-                                    class="text-danger">*</span></label>
-                            <input type="number" class="form-control custom-input" id="txAmount" placeholder="0.00"
-                                min="0.01" step="0.01" required />
-                            <div class="invalid-feedback">Enter a valid positive amount.</div>
+                        <!-- Field 2: Amount -->
+                        <div class="col-12 col-sm-6 col-lg-2">
+                            <label for="txAmount" class="form-label">
+                                Amount ($)
+                                <span class="text-danger" aria-hidden="true">*</span>
+                            </label>
+                            <input type="number" class="form-control custom-input" id="txAmount" name="txAmount"
+                                placeholder="0.00" min="0.01" step="0.01" required
+                                aria-describedby="txAmountFeedback" />
+                            <div class="invalid-feedback" id="txAmountFeedback">
+                                <i class="bi bi-exclamation-circle me-1"></i>Enter a valid positive amount.
+                            </div>
                         </div>
 
-                        <!-- Type -->
-                        <div class="col-12 col-md-2">
+                        <!-- Field 3: Type selector -->
+                        <div class="col-12 col-sm-6 col-lg-2">
                             <label for="txType" class="form-label">Type</label>
-                            <select class="form-select custom-input" id="txType">
-                                <option value="income">Income</option>
-                                <option value="expense">Expense</option>
+                            <select class="form-select custom-input" id="txType" name="txType"
+                                aria-label="Transaction type">
+                                <option value="income">&#8595; Income</option>
+                                <option value="expense">&#8593; Expense</option>
                             </select>
                         </div>
 
-                        <!-- Date -->
-                        <div class="col-12 col-md-2">
-                            <label for="txDate" class="form-label">Date</label>
-                            <input type="date" class="form-control custom-input" id="txDate" required />
-                            <div class="invalid-feedback">Please select a date.</div>
+                        <!-- Field 4: Date picker -->
+                        <div class="col-12 col-sm-6 col-lg-2">
+                            <label for="txDate" class="form-label">
+                                Date
+                                <span class="text-danger" aria-hidden="true">*</span>
+                            </label>
+                            <input type="date" class="form-control custom-input" id="txDate" name="txDate" required
+                                aria-describedby="txDateFeedback" />
+                            <div class="invalid-feedback" id="txDateFeedback">
+                                <i class="bi bi-exclamation-circle me-1"></i>Please select a date.
+                            </div>
+                        </div>
+
+                        <!-- Field 5: Action buttons (aligned to bottom of field row) -->
+                        <div class="col-12 col-sm-6 col-lg-1 d-flex align-items-end gap-2">
+                            <!-- Primary submit button -->
+                            <button type="submit" class="btn btn-add w-100" id="addBtn" aria-label="Add transaction">
+                                <i class="bi bi-plus-lg" aria-hidden="true"></i>
+                                <span class="d-none d-xl-inline ms-1">Add</span>
+                            </button>
                         </div>
 
                     </div>
+                    <!-- /row of fields -->
 
-                    <div class="d-flex gap-2 mt-4">
-                        <button type="submit" class="btn btn-add" id="addBtn">
-                            <i class="bi bi-plus-lg me-1"></i>Add Transaction
+                    <!-- ── Secondary action buttons (below fields) ────── -->
+                    <div class="d-flex gap-2 mt-4 pt-3 border-top">
+
+                        <!-- Full add button (visible on all sizes, more descriptive) -->
+                        <button type="submit" class="btn btn-add d-none d-lg-inline-flex" id="addBtnFull">
+                            <i class="bi bi-plus-lg me-1" aria-hidden="true"></i>Add Transaction
                         </button>
-                        <button type="button" class="btn btn-outline-secondary btn-clear" id="clearBtn">
-                            <i class="bi bi-x-lg me-1"></i>Clear
+
+                        <!-- Clear button -->
+                        <button type="button" class="btn btn-clear btn-outline-secondary" id="clearBtn">
+                            <i class="bi bi-arrow-counterclockwise me-1" aria-hidden="true"></i>Clear Form
                         </button>
+
                     </div>
-                </form>
-            </div>
-        </section>
 
-        <!-- SECTION 3: Transactions Table -->
-        <section id="tableSection">
-            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
-                <h2 class="section-title mb-0">
-                    <i class="bi bi-table me-2"></i>Transactions
-                </h2>
-                <span class="badge tx-count-badge" id="txCount">0 records</span>
+                </form>
+                <!-- /transactionForm -->
+
             </div>
-            <div class="table-wrapper rounded-4 shadow-sm overflow-hidden">
-                <table class="table table-hover align-middle mb-0" id="transactionTable">
-                    <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Description</th>
-                            <th scope="col">Type</th>
-                            <th scope="col">Amount</th>
-                            <th scope="col">Date</th>
-                            <th scope="col" class="text-center">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="transactionBody">
-                        <tr id="emptyRow">
-                            <td colspan="6" class="text-center py-5 empty-state">
-                                <i class="bi bi-inbox fs-1 d-block mb-2"></i>
-                                No transactions yet. Add one above!
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+            <!-- /form-wrapper -->
+
         </section>
+        <!-- /§2 Add Transaction -->
+
+
+        <!-- ============================================================
+         §3  TRANSACTIONS TABLE
+         Displays all added transactions in reverse-chronological order.
+         Columns: # | Description | Type | Amount | Date | Action
+         The <tbody> is populated entirely by jQuery (script.js).
+         An empty-state row is shown when no transactions exist.
+    ============================================================ -->
+        <section id="tableSection" aria-labelledby="tableHeading">
+
+            <!-- Section header with transaction count badge -->
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+                <h2 class="section-title mb-0" id="tableHeading">
+                    <i class="bi bi-table me-2" aria-hidden="true"></i>Transactions
+                </h2>
+
+                <!-- Record count — updated dynamically by script.js -->
+                <span class="badge tx-count-badge" id="txCount" aria-live="polite" aria-label="Record count">
+                    0 records
+                </span>
+            </div>
+
+            <!-- Responsive table wrapper (horizontal scroll on small screens) -->
+            <div class="table-wrapper rounded-4 shadow-sm overflow-hidden">
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle mb-0" id="transactionTable"
+                        aria-label="Transactions list" aria-describedby="tableHeading">
+
+                        <!-- ── Table Header ────────────────────────────── -->
+                        <thead>
+                            <tr>
+                                <!-- Serial number -->
+                                <th scope="col" style="width: 60px;">#</th>
+
+                                <!-- Transaction label -->
+                                <th scope="col">Description</th>
+
+                                <!-- Income / Expense badge -->
+                                <th scope="col" style="width: 130px;">Type</th>
+
+                                <!-- Monetary value -->
+                                <th scope="col" style="width: 140px;">Amount</th>
+
+                                <!-- Calendar date -->
+                                <th scope="col" style="width: 140px;">Date</th>
+
+                                <!-- Delete action -->
+                                <th scope="col" class="text-center" style="width: 90px;">Action</th>
+                            </tr>
+                        </thead>
+                        <!-- /thead -->
+
+                        <!-- ── Table Body — injected by jQuery ────────── -->
+                        <!--
+              script.js builds and inserts <tr> elements here.
+              On first load (or when all rows are deleted),
+              the emptyRow placeholder below is shown.
+            -->
+                        <tbody id="transactionBody">
+
+                            <!-- Empty state placeholder (visible by default) -->
+                            <tr id="emptyRow">
+                                <td colspan="6" class="text-center py-5 empty-state">
+                                    <i class="bi bi-inbox fs-1 d-block mb-2" aria-hidden="true"></i>
+                                    <span>No transactions yet.</span>
+                                    <br />
+                                    <small class="text-muted">Fill in the form above and click <strong>Add
+                                            Transaction</strong>.</small>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                        <!-- /tbody -->
+
+                    </table>
+
+                </div>
+                <!-- /table-responsive -->
+            </div>
+            <!-- /table-wrapper -->
+
+        </section>
+        <!-- /§3 Transactions Table -->
+
 
     </main>
+    <!-- /MAIN CONTENT -->
 
-    <!-- ── FOOTER ─────────────────────────────── -->
-    <footer class="text-center py-4 mt-2">
+
+    <!-- ================================================================
+       FOOTER
+  ================================================================ -->
+    <footer class="text-center py-4 mt-2" role="contentinfo">
         <p class="mb-0 footer-text">
-            Built with <span class="heart">♥</span> using HTML, Bootstrap &amp; jQuery
-            &nbsp;|&nbsp; Lab Project &copy; 2026
+            Built with <span class="heart" aria-label="love">&#9829;</span>
+            using HTML, Bootstrap &amp; jQuery
+            &nbsp;&mdash;&nbsp;
+            <strong>Sujan</strong> &copy; 2026
         </p>
     </footer>
+    <!-- /FOOTER -->
 
-    <!-- Scripts: jQuery → Bootstrap → Custom -->
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- ================================================================
+       SCRIPTS
+       Load order is important:
+         1. jQuery       — required by Bootstrap JS and our script
+         2. Bootstrap JS — provides tooltip, collapse, etc.
+         3. script.js    — our custom application logic
+  ================================================================ -->
+
+    <!-- 1. jQuery 3.7 (slim build omits ajax/effects not needed here) -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <!-- 2. Bootstrap JS bundle (includes Popper.js) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc4s9bIOgUxi8T/jzmFjBgEbG63CJFn7jqMaDu/t7Jz"
+        crossorigin="anonymous"></script>
+
+    <!-- 3. Custom jQuery application script -->
     <script src="js/script.js"></script>
 
 </body>
