@@ -1,0 +1,417 @@
+/* ================================================================
+   style.css — Expense Tracker Frontend
+   Location : frontend/css/style.css
+   Purpose  : Custom styles layered on top of Bootstrap 5
+
+   Sections:
+     1. CSS Custom Properties (Design Tokens)
+     2. Base / Reset
+     3. Navbar
+     4. Section Titles
+     5. Summary Cards
+     6. Form Wrapper & Controls
+     7. Buttons
+     8. Table
+     9. Empty State & Badges
+    10. Footer
+    11. Animations
+================================================================ */
+
+/* ── 1. Design Tokens ─────────────────────────────────────── */
+:root {
+    --clr-bg: #f0f4f8;
+    --clr-surface: #ffffff;
+    --clr-primary: #4361ee;
+    --clr-income: #2dc653;
+    --clr-income-bg: #edfaf1;
+    --clr-income-icon: #1a9c3e;
+    --clr-expense: #e63946;
+    --clr-expense-bg: #fdecea;
+    --clr-expense-icon: #b71c1c;
+    --clr-balance: #4361ee;
+    --clr-balance-bg: #eef0fd;
+    --clr-balance-icon: #2244bb;
+    --clr-navbar: #1a1a2e;
+    --clr-text: #1e293b;
+    --clr-muted: #64748b;
+    --clr-border: #e2e8f0;
+    --font-base: 'Inter', system-ui, sans-serif;
+    --radius-sm: 8px;
+    --shadow-card: 0 4px 20px rgba(67, 97, 238, 0.08);
+    --shadow-btn: 0 4px 14px rgba(67, 97, 238, 0.30);
+}
+
+/* ── 2. Base ──────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-base);
+    background-color: var(--clr-bg);
+    color: var(--clr-text);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+/* ── 3. Navbar ────────────────────────────────────────────── */
+#mainNavbar {
+    background-color: var(--clr-navbar);
+}
+
+.navbar-icon {
+    font-size: 1.4rem;
+    color: var(--clr-primary);
+}
+
+.lab-badge {
+    background-color: rgba(67, 97, 238, 0.2);
+    color: #a5b4fc;
+    font-size: 0.70rem;
+    padding: 0.35em 0.8em;
+    border-radius: 999px;
+}
+
+/* ── 4. Section Titles ────────────────────────────────────── */
+.section-title {
+    font-size: 1.15rem;
+    font-weight: 600;
+}
+
+.section-title i {
+    color: var(--clr-primary);
+}
+
+/* ── 5. Summary Cards ────────────────────────────────────── */
+.summary-card {
+    background-color: var(--clr-surface);
+    border: 1px solid var(--clr-border);
+    transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.summary-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-card);
+}
+
+.card-label {
+    font-size: 0.80rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--clr-muted);
+}
+
+.card-amount {
+    font-size: 1.8rem;
+    font-weight: 700;
+    letter-spacing: -1px;
+    margin: 0;
+}
+
+.card-sub {
+    font-size: 0.75rem;
+    color: var(--clr-muted);
+}
+
+.card-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+}
+
+.income-card {
+    background-color: var(--clr-income-bg);
+    border-color: #b7f0c8;
+}
+
+.income-card .card-amount {
+    color: var(--clr-income);
+}
+
+.income-icon {
+    background-color: rgba(44, 198, 83, 0.15);
+    color: var(--clr-income-icon);
+}
+
+.expense-card {
+    background-color: var(--clr-expense-bg);
+    border-color: #f5b9bc;
+}
+
+.expense-card .card-amount {
+    color: var(--clr-expense);
+}
+
+.expense-icon {
+    background-color: rgba(230, 57, 70, 0.12);
+    color: var(--clr-expense-icon);
+}
+
+.balance-card {
+    background-color: var(--clr-balance-bg);
+    border-color: #c7d0f8;
+}
+
+.balance-card .card-amount {
+    color: var(--clr-balance);
+}
+
+.balance-icon {
+    background-color: rgba(67, 97, 238, 0.12);
+    color: var(--clr-balance-icon);
+}
+
+/* ── 6. Form ─────────────────────────────────────────────── */
+.form-wrapper {
+    background-color: var(--clr-surface);
+    border: 1px solid var(--clr-border);
+}
+
+.custom-input {
+    border: 1.5px solid var(--clr-border);
+    border-radius: var(--radius-sm);
+    padding: 0.55rem 0.85rem;
+    font-size: 0.90rem;
+    background-color: #fafbfc;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.custom-input:focus {
+    border-color: var(--clr-primary);
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.12);
+    background-color: #fff;
+    outline: none;
+}
+
+.custom-input::placeholder {
+    color: #aab4c4;
+    font-size: 0.85rem;
+}
+
+.form-label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-bottom: 0.35rem;
+}
+
+/* ── 7. Buttons ──────────────────────────────────────────── */
+.btn-add {
+    background: linear-gradient(135deg, var(--clr-primary), #7b2ff7);
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.88rem;
+    padding: 0.55rem 1.4rem;
+    border: none;
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-btn);
+    transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.btn-add:hover {
+    opacity: 0.90;
+    transform: translateY(-2px);
+    color: #fff;
+}
+
+.btn-add:active {
+    transform: translateY(0);
+}
+
+.btn-clear {
+    font-size: 0.88rem;
+    padding: 0.55rem 1.2rem;
+    border-radius: var(--radius-sm);
+}
+
+.btn-delete {
+    background: none;
+    border: none;
+    color: var(--clr-expense);
+    font-size: 1.0rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: var(--radius-sm);
+    transition: background 0.15s ease;
+    cursor: pointer;
+}
+
+.btn-delete:hover {
+    background-color: var(--clr-expense-bg);
+}
+
+/* ── 8. Table ────────────────────────────────────────────── */
+.table-wrapper {
+    background-color: var(--clr-surface);
+    border: 1px solid var(--clr-border);
+}
+
+#transactionTable thead {
+    background-color: #f8fafc;
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    color: var(--clr-muted);
+}
+
+#transactionTable thead th {
+    padding: 0.85rem 1.1rem;
+    border: none;
+}
+
+#transactionTable tbody tr {
+    border-bottom: 1px solid var(--clr-border);
+}
+
+#transactionTable tbody tr:last-child {
+    border-bottom: none;
+}
+
+#transactionTable tbody td {
+    padding: 0.85rem 1.1rem;
+    font-size: 0.88rem;
+}
+
+.tx-serial {
+    font-weight: 600;
+    color: var(--clr-muted);
+    font-size: 0.80rem;
+}
+
+.tx-amount-income {
+    color: var(--clr-income);
+    font-weight: 600;
+}
+
+.tx-amount-expense {
+    color: var(--clr-expense);
+    font-weight: 600;
+}
+
+.type-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.25em 0.75em;
+    border-radius: 999px;
+    text-transform: capitalize;
+}
+
+.type-badge.income {
+    background-color: var(--clr-income-bg);
+    color: var(--clr-income-icon);
+}
+
+.type-badge.expense {
+    background-color: var(--clr-expense-bg);
+    color: var(--clr-expense-icon);
+}
+
+/* ── 9. Empty State & Badges ─────────────────────────────── */
+.empty-state {
+    color: var(--clr-muted);
+    font-size: 0.90rem;
+}
+
+.empty-state i {
+    color: #cbd5e1;
+}
+
+.tx-count-badge {
+    background-color: var(--clr-balance-bg);
+    color: var(--clr-primary);
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 0.35em 0.9em;
+    border-radius: 999px;
+    border: 1px solid #c7d0f8;
+}
+
+/* ── 10. Footer ──────────────────────────────────────────── */
+footer {
+    border-top: 1px solid var(--clr-border);
+    background-color: var(--clr-surface);
+}
+
+.footer-text {
+    font-size: 0.80rem;
+    color: var(--clr-muted);
+}
+
+.heart {
+    color: var(--clr-expense);
+}
+
+/* ── 11. Animations ──────────────────────────────────────── */
+.tx-row-new {
+    animation: slideIn 0.30s ease forwards;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    20% {
+        transform: translateX(-6px);
+    }
+
+    40% {
+        transform: translateX(6px);
+    }
+
+    60% {
+        transform: translateX(-4px);
+    }
+
+    80% {
+        transform: translateX(4px);
+    }
+}
+
+.shake {
+    animation: shake 0.4s ease;
+}
+
+@keyframes pulse-value {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.06);
+    }
+}
+
+.pulse {
+    animation: pulse-value 0.35s ease;
+}
