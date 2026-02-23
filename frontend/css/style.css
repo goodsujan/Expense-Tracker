@@ -1,157 +1,421 @@
 /* ================================================================
-   style.css — Expense Tracker Frontend
-   Location : frontend/css/style.css
-   Purpose  : Custom styles layered on top of Bootstrap 5
+   style.css — Expense Tracker
+   File    : frontend/css/style.css
+   Author  : Sujan
+   Purpose : Complete custom styles layered on top of Bootstrap 5.
+             Provides all the visual design for the Expense Tracker
+             single-page application.
 
-   Sections:
-     1. CSS Custom Properties (Design Tokens)
-     2. Base / Reset
-     3. Navbar
-     4. Section Titles
-     5. Summary Cards
-     6. Form Wrapper & Controls
-     7. Buttons
-     8. Table
-     9. Empty State & Badges
-    10. Footer
-    11. Animations
+   TABLE OF CONTENTS
+   ─────────────────────────────────────────────────────────────
+    §1.  CSS Custom Properties  (Design Tokens)
+    §2.  Base & Reset
+    §3.  Typography
+    §4.  Layout Helpers
+    §5.  Navbar
+    §6.  Section Titles
+    §7.  Summary Cards
+         7a. Card Shell
+         7b. Card Elements (label, amount, sub-text, icon)
+         7c. Card Colour Variants (income, expense, balance)
+    §8.  Add Transaction Form
+         8a. Form Wrapper
+         8b. Form Controls (inputs, selects)
+         8c. Form Labels & Validation
+    §9.  Action Buttons
+    §10. Transactions Table
+         10a. Table Wrapper
+         10b. Table Head
+         10c. Table Body & Rows
+         10d. Cell Helpers (serial, amount, type badge)
+    §11. Empty State
+    §12. Badges & Chips
+    §13. Footer
+    §14. Micro-animations & Keyframes
+    §15. Responsive Overrides
+   ─────────────────────────────────────────────────────────────
 ================================================================ */
 
-/* ── 1. Design Tokens ─────────────────────────────────────── */
+
+/* ================================================================
+   §1.  CSS CUSTOM PROPERTIES — Design Tokens
+        All colour, spacing, and radius values live here.
+        Change a token and it ripples through every component.
+================================================================ */
 :root {
-    --clr-bg: #f0f4f8;
+
+    /* ── Colour Palette ──────────────────────────────────────── */
+    --clr-bg: #f0f4f9;
+    /* Page background (cool grey)  */
     --clr-surface: #ffffff;
+    /* Card / panel surface          */
+    --clr-surface-2: #f8fafc;
+    /* Alternate surface (thead)     */
     --clr-primary: #4361ee;
+    /* Brand blue-purple             */
+    --clr-primary-light: #eef0fd;
+    /* Very light primary tint       */
+    --clr-primary-dark: #3451d1;
+    /* Darker primary for hover      */
+
+    /* Income (green) */
     --clr-income: #2dc653;
     --clr-income-bg: #edfaf1;
+    --clr-income-border: #b7f0c8;
     --clr-income-icon: #1a9c3e;
+    --clr-income-dark: #166a2a;
+
+    /* Expense (red) */
     --clr-expense: #e63946;
     --clr-expense-bg: #fdecea;
+    --clr-expense-border: #f5b9bc;
     --clr-expense-icon: #b71c1c;
+    --clr-expense-dark: #8b0000;
+
+    /* Balance (blue) */
     --clr-balance: #4361ee;
     --clr-balance-bg: #eef0fd;
+    --clr-balance-border: #c7d0f8;
     --clr-balance-icon: #2244bb;
+
+    /* Neutral shades */
     --clr-navbar: #1a1a2e;
+    /* Dark navy navbar              */
     --clr-text: #1e293b;
-    --clr-muted: #64748b;
+    /* Primary body text             */
+    --clr-text-light: #475569;
+    /* Secondary / supporting text   */
+    --clr-muted: #94a3b8;
+    /* Placeholder / disabled        */
     --clr-border: #e2e8f0;
-    --font-base: 'Inter', system-ui, sans-serif;
+    /* Default border                */
+    --clr-border-focus: var(--clr-primary);
+    /* Input focus border      */
+    --clr-row-hover: #f7f9ff;
+    /* Table row hover background    */
+
+    /* ── Typography ─────────────────────────────────────────── */
+    --font-base: 'Inter', system-ui, -apple-system, sans-serif;
+    --font-mono: 'Courier New', Courier, monospace;
+    --fs-xs: 0.72rem;
+    --fs-sm: 0.82rem;
+    --fs-base: 0.93rem;
+    --fs-md: 1.05rem;
+    --fs-lg: 1.20rem;
+    --fs-xl: 1.80rem;
+    --fw-regular: 400;
+    --fw-medium: 500;
+    --fw-semibold: 600;
+    --fw-bold: 700;
+    --lh-base: 1.65;
+
+    /* ── Spacing Scale ───────────────────────────────────────── */
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 16px;
+    --space-lg: 24px;
+    --space-xl: 40px;
+
+    /* ── Border Radii ────────────────────────────────────────── */
+    --radius-xs: 4px;
     --radius-sm: 8px;
-    --shadow-card: 0 4px 20px rgba(67, 97, 238, 0.08);
-    --shadow-btn: 0 4px 14px rgba(67, 97, 238, 0.30);
+    --radius-md: 12px;
+    --radius-lg: 18px;
+    --radius-xl: 24px;
+    --radius-pill: 999px;
+
+    /* ── Shadows ─────────────────────────────────────────────── */
+    --shadow-xs: 0 1px 3px rgba(15, 23, 42, 0.06);
+    --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.08);
+    --shadow-card: 0 4px 20px rgba(67, 97, 238, 0.09);
+    --shadow-btn: 0 4px 14px rgba(67, 97, 238, 0.32);
+    --shadow-focus: 0 0 0 3px rgba(67, 97, 238, 0.18);
+
+    /* ── Transitions ─────────────────────────────────────────── */
+    --transition-fast: 0.15s ease;
+    --transition-med: 0.24s ease;
+    --transition-slow: 0.38s ease;
 }
 
-/* ── 2. Base ──────────────────────────────────────────────── */
+
+/* ================================================================
+   §2.  BASE & RESET
+================================================================ */
+
+/* Apply border-box to everything */
 *,
 *::before,
 *::after {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
+/* Smooth anchor scrolling */
 html {
     scroll-behavior: smooth;
 }
 
 body {
     font-family: var(--font-base);
-    background-color: var(--clr-bg);
+    font-size: var(--fs-base);
+    font-weight: var(--fw-regular);
+    line-height: var(--lh-base);
     color: var(--clr-text);
-    font-size: 0.95rem;
-    line-height: 1.6;
+    background-color: var(--clr-bg);
     min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
-/* ── 3. Navbar ────────────────────────────────────────────── */
+/* Remove default list styles in utility contexts */
+ul,
+ol {
+    list-style: none;
+}
+
+/* Prevent images from overflowing */
+img {
+    max-width: 100%;
+    display: block;
+}
+
+
+/* ================================================================
+   §3.  TYPOGRAPHY
+================================================================ */
+
+/* Strong / bold emphasis */
+strong,
+b {
+    font-weight: var(--fw-semibold);
+}
+
+/* Small helper text */
+small,
+.text-sm {
+    font-size: var(--fs-sm);
+    color: var(--clr-text-light);
+}
+
+/* Monospace (amounts in compact contexts) */
+.font-mono {
+    font-family: var(--font-mono);
+}
+
+/* Upper-cased label style (card labels, table headers) */
+.label-caps {
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.75px;
+    color: var(--clr-text-light);
+}
+
+
+/* ================================================================
+   §4.  LAYOUT HELPERS
+================================================================ */
+
+/* Main content container — gives breathing room below navbar */
+#mainContent {
+    padding-top: var(--space-xl);
+    padding-bottom: var(--space-xl);
+}
+
+/* ── Divider line used inside form ────────────────────────── */
+.border-top {
+    border-color: var(--clr-border) !important;
+}
+
+
+/* ================================================================
+   §5.  NAVBAR
+================================================================ */
+
 #mainNavbar {
     background-color: var(--clr-navbar);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    /* Ensure navbar stacks above all content */
+    position: relative;
+    z-index: 100;
 }
 
+/* Wallet icon left of the brand name */
 .navbar-icon {
-    font-size: 1.4rem;
+    font-size: 1.45rem;
     color: var(--clr-primary);
+    line-height: 1;
 }
 
+/* App name wordmark */
+.navbar-brand {
+    letter-spacing: -0.4px;
+    color: #f1f5f9 !important;
+    font-size: 1.30rem !important;
+}
+
+/* Author badge — top right corner of navbar */
 .lab-badge {
-    background-color: rgba(67, 97, 238, 0.2);
+    background-color: rgba(67, 97, 238, 0.18);
     color: #a5b4fc;
-    font-size: 0.70rem;
-    padding: 0.35em 0.8em;
-    border-radius: 999px;
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-semibold);
+    letter-spacing: 0.45px;
+    padding: 0.32em 0.85em;
+    border-radius: var(--radius-pill);
+    border: 1px solid rgba(165, 180, 252, 0.20);
+    white-space: nowrap;
 }
 
-/* ── 4. Section Titles ────────────────────────────────────── */
+
+/* ================================================================
+   §6.  SECTION TITLES
+================================================================ */
+
 .section-title {
-    font-size: 1.15rem;
-    font-weight: 600;
+    font-size: var(--fs-lg);
+    font-weight: var(--fw-semibold);
+    color: var(--clr-text);
+    letter-spacing: -0.25px;
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
 }
 
+/* Icon inside the section title */
 .section-title i {
     color: var(--clr-primary);
+    font-size: 1.0em;
+    flex-shrink: 0;
 }
 
-/* ── 5. Summary Cards ────────────────────────────────────── */
+
+/* ================================================================
+   §7.  SUMMARY CARDS
+================================================================ */
+
+/* ── 7a. Card Shell ─────────────────────────────────────────── */
 .summary-card {
+    /* Base surface */
     background-color: var(--clr-surface);
     border: 1px solid var(--clr-border);
-    transition: transform 0.22s ease, box-shadow 0.22s ease;
+
+    /* Lift on hover */
+    transition:
+        transform var(--transition-med),
+        box-shadow var(--transition-med);
+
+    /* No pointer change — these are display-only panels */
+    cursor: default;
+
+    /* Prevent content overflow on very small screens */
+    overflow: hidden;
+
+    /* Relative for potential pseudo-element decorations */
+    position: relative;
 }
 
+/* Hover state: subtle lift + coloured shadow */
 .summary-card:hover {
-    transform: translateY(-4px);
+    transform: translateY(-5px);
     box-shadow: var(--shadow-card);
 }
 
+/* Thin coloured accent bar at the left edge of each card */
+.summary-card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+    background-color: var(--clr-border);
+    /* overridden per variant */
+}
+
+
+/* ── 7b. Card Elements ──────────────────────────────────────── */
+
+/* Label: "TOTAL INCOME" etc. */
 .card-label {
-    font-size: 0.80rem;
-    font-weight: 600;
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-semibold);
     text-transform: uppercase;
-    letter-spacing: 0.8px;
-    color: var(--clr-muted);
+    letter-spacing: 0.80px;
+    color: var(--clr-text-light);
 }
 
+/* Large currency amount */
 .card-amount {
-    font-size: 1.8rem;
-    font-weight: 700;
-    letter-spacing: -1px;
-    margin: 0;
+    font-size: var(--fs-xl);
+    font-weight: var(--fw-bold);
+    letter-spacing: -1.2px;
+    line-height: 1.1;
+    margin: var(--space-xs) 0 0;
+    /* Inherit colour from variant class below */
 }
 
+/* Small descriptive text below the amount */
 .card-sub {
-    font-size: 0.75rem;
+    font-size: var(--fs-sm);
     color: var(--clr-muted);
+    margin-top: var(--space-xs);
 }
 
+/* Circular icon container (top-right corner of card) */
 .card-icon {
-    width: 40px;
-    height: 40px;
+    width: 42px;
+    height: 42px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.1rem;
+    font-size: 1.15rem;
+    flex-shrink: 0;
+    transition: transform var(--transition-med);
 }
 
+/* Spin the icon slightly on card hover */
+.summary-card:hover .card-icon {
+    transform: rotate(-8deg) scale(1.08);
+}
+
+
+/* ── 7c. Card Colour Variants ───────────────────────────────── */
+
+/* Income — green */
 .income-card {
     background-color: var(--clr-income-bg);
-    border-color: #b7f0c8;
+    border-color: var(--clr-income-border);
+}
+
+.income-card::before {
+    background-color: var(--clr-income);
 }
 
 .income-card .card-amount {
-    color: var(--clr-income);
+    color: var(--clr-income-dark);
 }
 
 .income-icon {
-    background-color: rgba(44, 198, 83, 0.15);
+    background-color: rgba(44, 198, 83, 0.14);
     color: var(--clr-income-icon);
 }
 
+/* Expense — red */
 .expense-card {
     background-color: var(--clr-expense-bg);
-    border-color: #f5b9bc;
+    border-color: var(--clr-expense-border);
+}
+
+.expense-card::before {
+    background-color: var(--clr-expense);
 }
 
 .expense-card .card-amount {
-    color: var(--clr-expense);
+    color: var(--clr-expense-dark);
 }
 
 .expense-icon {
@@ -159,13 +423,18 @@ body {
     color: var(--clr-expense-icon);
 }
 
+/* Balance — blue */
 .balance-card {
     background-color: var(--clr-balance-bg);
-    border-color: #c7d0f8;
+    border-color: var(--clr-balance-border);
+}
+
+.balance-card::before {
+    background-color: var(--clr-balance);
 }
 
 .balance-card .card-amount {
-    color: var(--clr-balance);
+    color: var(--clr-balance-icon);
 }
 
 .balance-icon {
@@ -173,197 +442,423 @@ body {
     color: var(--clr-balance-icon);
 }
 
-/* ── 6. Form ─────────────────────────────────────────────── */
+
+/* ================================================================
+   §8.  ADD TRANSACTION FORM
+================================================================ */
+
+/* ── 8a. Form Wrapper (the white card around the form) ──────── */
 .form-wrapper {
     background-color: var(--clr-surface);
     border: 1px solid var(--clr-border);
+    box-shadow: var(--shadow-xs);
 }
 
+
+/* ── 8b. Form Controls ──────────────────────────────────────── */
+
+/* Shared style for <input> and <select> */
 .custom-input {
+    /* Sizing */
+    width: 100%;
+    padding: 0.56rem 0.90rem;
+    font-size: var(--fs-base);
+    font-family: var(--font-base);
+    color: var(--clr-text);
+
+    /* Border & background */
+    background-color: #fafbfc;
     border: 1.5px solid var(--clr-border);
     border-radius: var(--radius-sm);
-    padding: 0.55rem 0.85rem;
-    font-size: 0.90rem;
-    background-color: #fafbfc;
-    transition: border-color 0.18s ease, box-shadow 0.18s ease;
-}
 
-.custom-input:focus {
-    border-color: var(--clr-primary);
-    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.12);
-    background-color: #fff;
+    /* Smooth transition for focus ring */
+    transition:
+        border-color var(--transition-fast),
+        box-shadow var(--transition-fast),
+        background var(--transition-fast);
+
+    /* Override Bootstrap's default outline */
     outline: none;
 }
 
+/* Focus state — branded focus ring */
+.custom-input:focus {
+    border-color: var(--clr-border-focus);
+    box-shadow: var(--shadow-focus);
+    background-color: #ffffff;
+    outline: none;
+}
+
+/* Placeholder text */
 .custom-input::placeholder {
-    color: #aab4c4;
-    font-size: 0.85rem;
+    color: var(--clr-muted);
+    font-size: var(--fs-sm);
 }
 
+/* Number input — remove browser default spin arrows (optional) */
+.custom-input[type="number"]::-webkit-inner-spin-button,
+.custom-input[type="number"]::-webkit-outer-spin-button {
+    opacity: 0.4;
+}
+
+/* Select arrow alignment (Bootstrap override) */
+.form-select.custom-input {
+    background-position: right 0.75rem center;
+    padding-right: 2.25rem;
+    cursor: pointer;
+}
+
+/* Invalid state (Bootstrap .is-invalid) */
+.custom-input.is-invalid {
+    border-color: var(--clr-expense);
+    background-color: #fffafa;
+}
+
+.custom-input.is-invalid:focus {
+    box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.15);
+}
+
+
+/* ── 8c. Form Labels & Validation Messages ──────────────────── */
+
+/* Form field labels */
 .form-label {
-    font-size: 0.85rem;
-    font-weight: 500;
-    margin-bottom: 0.35rem;
+    display: block;
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-medium);
+    color: var(--clr-text);
+    margin-bottom: var(--space-xs);
+    line-height: 1.4;
 }
 
-/* ── 7. Buttons ──────────────────────────────────────────── */
+/* Required asterisk (*) */
+.form-label .text-danger {
+    margin-left: 2px;
+    font-weight: var(--fw-bold);
+}
+
+/* Bootstrap's .invalid-feedback */
+.invalid-feedback {
+    font-size: var(--fs-xs);
+    color: var(--clr-expense);
+    margin-top: var(--space-xs);
+    display: none;
+    /* shown by Bootstrap when .is-invalid present */
+}
+
+/* Show validation message when sibling input is invalid */
+.is-invalid~.invalid-feedback,
+.custom-input.is-invalid+.invalid-feedback {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+
+/* ================================================================
+   §9.  ACTION BUTTONS
+================================================================ */
+
+/* ── Primary — Add Transaction ──────────────────────────────── */
 .btn-add {
-    background: linear-gradient(135deg, var(--clr-primary), #7b2ff7);
-    color: #fff;
-    font-weight: 600;
-    font-size: 0.88rem;
-    padding: 0.55rem 1.4rem;
+    /* Gradient background */
+    background: linear-gradient(135deg, var(--clr-primary) 0%, #7b2ff7 100%);
+    color: #ffffff;
+    font-weight: var(--fw-semibold);
+    font-size: var(--fs-sm);
+    padding: 0.56rem 1.40rem;
     border: none;
     border-radius: var(--radius-sm);
     box-shadow: var(--shadow-btn);
-    transition: opacity 0.18s ease, transform 0.18s ease;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+
+    /* Smooth hover effects */
+    transition:
+        opacity var(--transition-fast),
+        transform var(--transition-fast),
+        box-shadow var(--transition-fast);
 }
 
 .btn-add:hover {
-    opacity: 0.90;
+    opacity: 0.88;
+    color: #ffffff;
     transform: translateY(-2px);
-    color: #fff;
+    box-shadow: 0 6px 22px rgba(67, 97, 238, 0.42);
 }
 
 .btn-add:active {
-    transform: translateY(0);
+    transform: translateY(0px);
+    box-shadow: var(--shadow-btn);
 }
 
+/* Prevent the duplicate full-text button's icon overlapping */
+.btn-add i {
+    flex-shrink: 0;
+}
+
+
+/* ── Secondary — Clear Form ─────────────────────────────────── */
 .btn-clear {
-    font-size: 0.88rem;
-    padding: 0.55rem 1.2rem;
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-medium);
+    padding: 0.56rem 1.20rem;
     border-radius: var(--radius-sm);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    transition:
+        background var(--transition-fast),
+        color var(--transition-fast);
+    white-space: nowrap;
 }
 
+.btn-clear:hover {
+    background-color: var(--clr-border);
+}
+
+
+/* ── Delete row button (inside table) ───────────────────────── */
 .btn-delete {
-    background: none;
+    background: transparent;
     border: none;
     color: var(--clr-expense);
     font-size: 1.0rem;
-    padding: 0.2rem 0.5rem;
+    width: 32px;
+    height: 32px;
     border-radius: var(--radius-sm);
-    transition: background 0.15s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
     cursor: pointer;
+    transition:
+        background-color var(--transition-fast),
+        color var(--transition-fast),
+        transform var(--transition-fast);
 }
 
 .btn-delete:hover {
     background-color: var(--clr-expense-bg);
+    color: var(--clr-expense-dark);
+    transform: scale(1.12);
 }
 
-/* ── 8. Table ────────────────────────────────────────────── */
+.btn-delete:active {
+    transform: scale(0.96);
+}
+
+
+/* ================================================================
+   §10.  TRANSACTIONS TABLE
+================================================================ */
+
+/* ── 10a. Table Wrapper ─────────────────────────────────────── */
 .table-wrapper {
     background-color: var(--clr-surface);
     border: 1px solid var(--clr-border);
+    box-shadow: var(--shadow-xs);
+    /* Rounded corners clip the inner table correctly */
+    overflow: hidden;
 }
 
+/* Bootstrap .table-responsive removes the scroll bar when not needed */
+.table-responsive {
+    margin: 0;
+}
+
+
+/* ── 10b. Table Head ───────────────────────────────────────── */
 #transactionTable thead {
-    background-color: #f8fafc;
-    font-size: 0.78rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.7px;
-    color: var(--clr-muted);
+    background-color: var(--clr-surface-2);
+    border-bottom: 2px solid var(--clr-border);
 }
 
 #transactionTable thead th {
-    padding: 0.85rem 1.1rem;
+    /* Layout */
+    padding: 0.80rem 1.10rem;
+    vertical-align: middle;
+
+    /* Typography */
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.72px;
+    color: var(--clr-text-light);
+
+    /* Remove Bootstrap's default thead border */
     border: none;
+
+    /* No text wrapping in header cells */
+    white-space: nowrap;
 }
 
+
+/* ── 10c. Table Body & Rows ────────────────────────────────── */
 #transactionTable tbody tr {
     border-bottom: 1px solid var(--clr-border);
+    transition: background-color var(--transition-fast);
 }
 
+/* Remove border from the very last row */
 #transactionTable tbody tr:last-child {
     border-bottom: none;
 }
 
+/* Hover highlight */
+#transactionTable tbody tr:hover:not(#emptyRow) {
+    background-color: var(--clr-row-hover);
+}
+
+/* Table data cells */
 #transactionTable tbody td {
-    padding: 0.85rem 1.1rem;
-    font-size: 0.88rem;
+    padding: 0.82rem 1.10rem;
+    font-size: var(--fs-sm);
+    color: var(--clr-text);
+    vertical-align: middle;
+    border: none;
 }
 
+
+/* ── 10d. Cell Helpers ─────────────────────────────────────── */
+
+/* Serial number cell (muted, smaller) */
 .tx-serial {
-    font-weight: 600;
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-semibold);
     color: var(--clr-muted);
-    font-size: 0.80rem;
 }
 
+/* Description cell (truncate long text) */
+.tx-description {
+    max-width: 240px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Amount cells */
 .tx-amount-income {
-    color: var(--clr-income);
-    font-weight: 600;
+    color: var(--clr-income-dark);
+    font-weight: var(--fw-semibold);
 }
 
 .tx-amount-expense {
-    color: var(--clr-expense);
-    font-weight: 600;
+    color: var(--clr-expense-dark);
+    font-weight: var(--fw-semibold);
 }
 
+/* Type badge pill */
 .type-badge {
     display: inline-flex;
     align-items: center;
-    gap: 0.3rem;
-    font-size: 0.75rem;
-    font-weight: 600;
-    padding: 0.25em 0.75em;
-    border-radius: 999px;
+    gap: 0.28rem;
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-semibold);
+    padding: 0.26em 0.80em;
+    border-radius: var(--radius-pill);
     text-transform: capitalize;
+    white-space: nowrap;
+    letter-spacing: 0.2px;
 }
 
+/* Income badge — green */
 .type-badge.income {
     background-color: var(--clr-income-bg);
     color: var(--clr-income-icon);
+    border: 1px solid var(--clr-income-border);
 }
 
+/* Expense badge — red */
 .type-badge.expense {
     background-color: var(--clr-expense-bg);
     color: var(--clr-expense-icon);
+    border: 1px solid var(--clr-expense-border);
 }
 
-/* ── 9. Empty State & Badges ─────────────────────────────── */
+
+/* ================================================================
+   §11.  EMPTY STATE
+   Shown inside the table when there are no transactions.
+================================================================ */
+
 .empty-state {
-    color: var(--clr-muted);
-    font-size: 0.90rem;
+    color: var(--clr-text-light);
+    font-size: var(--fs-base);
+    padding: var(--space-xl) var(--space-md) !important;
+    line-height: 1.8;
 }
 
+/* Large inbox icon */
 .empty-state i {
-    color: #cbd5e1;
+    color: var(--clr-border);
+    font-size: 2.80rem;
+    margin-bottom: var(--space-sm);
+    display: block;
 }
 
+/* Hint text below the main empty message */
+.empty-state small {
+    font-size: var(--fs-sm);
+    color: var(--clr-muted);
+}
+
+
+/* ================================================================
+   §12.  BADGES & CHIPS
+================================================================ */
+
+/* Transaction count badge beside the section heading */
 .tx-count-badge {
-    background-color: var(--clr-balance-bg);
+    background-color: var(--clr-primary-light);
     color: var(--clr-primary);
-    font-size: 0.78rem;
-    font-weight: 600;
-    padding: 0.35em 0.9em;
-    border-radius: 999px;
-    border: 1px solid #c7d0f8;
+    border: 1px solid var(--clr-balance-border);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-semibold);
+    padding: 0.32em 0.90em;
+    border-radius: var(--radius-pill);
+    letter-spacing: 0.3px;
 }
 
-/* ── 10. Footer ──────────────────────────────────────────── */
+
+/* ================================================================
+   §13.  FOOTER
+================================================================ */
+
 footer {
-    border-top: 1px solid var(--clr-border);
     background-color: var(--clr-surface);
+    border-top: 1px solid var(--clr-border);
 }
 
 .footer-text {
-    font-size: 0.80rem;
+    font-size: var(--fs-sm);
     color: var(--clr-muted);
 }
 
+/* Heart icon */
 .heart {
     color: var(--clr-expense);
+    font-size: 0.90em;
+    display: inline;
+    animation: heartbeat 2.0s ease infinite;
 }
 
-/* ── 11. Animations ──────────────────────────────────────── */
+
+/* ================================================================
+   §14.  MICRO-ANIMATIONS & KEYFRAMES
+================================================================ */
+
+/* ── Slide-in for new table rows ────────────────────────────── */
 .tx-row-new {
-    animation: slideIn 0.30s ease forwards;
+    animation: slideInRow var(--transition-slow) ease forwards;
 }
 
-@keyframes slideIn {
+@keyframes slideInRow {
     from {
         opacity: 0;
-        transform: translateY(-8px);
+        transform: translateY(-10px);
     }
 
     to {
@@ -372,46 +867,191 @@ footer {
     }
 }
 
-@keyframes shake {
+
+/* ── Shake — form validation error ─────────────────────────── */
+.shake {
+    animation: shakeX 0.42s ease;
+}
+
+@keyframes shakeX {
 
     0%,
     100% {
         transform: translateX(0);
     }
 
-    20% {
-        transform: translateX(-6px);
+    18% {
+        transform: translateX(-7px);
     }
 
-    40% {
-        transform: translateX(6px);
+    36% {
+        transform: translateX(7px);
     }
 
-    60% {
-        transform: translateX(-4px);
+    54% {
+        transform: translateX(-5px);
     }
 
-    80% {
-        transform: translateX(4px);
+    72% {
+        transform: translateX(5px);
+    }
+
+    90% {
+        transform: translateX(-2px);
     }
 }
 
-.shake {
-    animation: shake 0.4s ease;
+
+/* ── Pulse — summary card values updating ───────────────────── */
+.pulse {
+    animation: pulseScale 0.38s ease;
 }
 
-@keyframes pulse-value {
+@keyframes pulseScale {
 
     0%,
     100% {
         transform: scale(1);
     }
 
-    50% {
-        transform: scale(1.06);
+    45% {
+        transform: scale(1.07);
     }
 }
 
-.pulse {
-    animation: pulse-value 0.35s ease;
+
+/* ── Heartbeat — footer heart icon ─────────────────────────── */
+@keyframes heartbeat {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    14% {
+        transform: scale(1.18);
+    }
+
+    28% {
+        transform: scale(1);
+    }
+
+    42% {
+        transform: scale(1.12);
+    }
+
+    56% {
+        transform: scale(1);
+    }
+}
+
+
+/* ── Fade-in — page load ──────────────────────────────────── */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Apply subtle entrance animation to each major section */
+#summarySection,
+#formSection,
+#tableSection {
+    animation: fadeIn 0.45s ease both;
+}
+
+#formSection {
+    animation-delay: 0.10s;
+}
+
+#tableSection {
+    animation-delay: 0.20s;
+}
+
+
+/* ================================================================
+   §15.  RESPONSIVE OVERRIDES
+   These rules fine-tune the layout at specific breakpoints.
+   Bootstrap handles the column grid; we handle visual details.
+================================================================ */
+
+/* ── Mobile  (< 576px) ─────────────────────────────────────── */
+@media (max-width: 575.98px) {
+
+    /* Reduce card amount size on very small screens */
+    .card-amount {
+        font-size: 1.45rem;
+    }
+
+    /* Stack buttons full-width below the form fields */
+    .d-flex.gap-2.mt-4.pt-3 {
+        flex-direction: column;
+    }
+
+    .btn-add,
+    .btn-clear {
+        width: 100%;
+        justify-content: center;
+    }
+
+    /* Tighter table cell padding on mobile */
+    #transactionTable thead th,
+    #transactionTable tbody td {
+        padding: 0.65rem 0.75rem;
+    }
+
+    /* Section title slightly smaller */
+    .section-title {
+        font-size: var(--fs-md);
+    }
+}
+
+
+/* ── Tablet  (576px – 767px) ────────────────────────────────── */
+@media (min-width: 576px) and (max-width: 767.98px) {
+
+    .card-amount {
+        font-size: 1.60rem;
+    }
+
+    .btn-add,
+    .btn-clear {
+        padding: 0.50rem 1.10rem;
+    }
+}
+
+
+/* ── Desktop  (≥ 992px) ─────────────────────────────────────── */
+@media (min-width: 992px) {
+
+    /* Give the page a max reading width */
+    .container {
+        max-width: 1180px;
+    }
+
+    /* Wider padding inside the form card */
+    .form-wrapper {
+        padding: 2rem 2.25rem !important;
+    }
+
+    /* Slightly larger section titles */
+    .section-title {
+        font-size: 1.22rem;
+    }
+}
+
+
+/* ── Large Desktop  (≥ 1200px) ──────────────────────────────── */
+@media (min-width: 1200px) {
+
+    /* Card amounts can grow a bit more */
+    .card-amount {
+        font-size: 2.0rem;
+    }
 }
